@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ restaurant.name }} | Restaurant & Reservations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="{{ restaurant.name }} home">
+        <span class="brand-mark">AT</span>
+        <span>{{ restaurant.name }}</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#menu">Menu</a>
+        <a href="#reserve">Reserve</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <a class="header-action" href="#reserve">Book a Table</a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Casablanca dining room</p>
+          <h1 id="hero-title">{{ restaurant.name }}</h1>
+          <p>{{ restaurant.tagline }}</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#reserve">Reserve now</a>
+            <a class="button secondary" href="#menu">Explore menu</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="Featured dining highlights">
+          <div>
+            <span>Tonight's mood</span>
+            <strong>Saffron, citrus, smoke</strong>
+          </div>
+          <div>
+            <span>Chef pick</span>
+            <strong>Citrus Chicken Tagine</strong>
+          </div>
+          <div>
+            <span>Open today</span>
+            <strong>{{ restaurant.hours.Thursday }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="intro-band">
+        <div>
+          <span class="stat">28</span>
+          <span>seasonal dishes</span>
+        </div>
+        <div>
+          <span class="stat">4.8</span>
+          <span>guest rating</span>
+        </div>
+        <div>
+          <span class="stat">12</span>
+          <span>max online party</span>
+        </div>
+      </section>
+
+      <section class="ai-section" id="ai-concierge">
+        <div class="section-heading">
+          <p class="eyebrow">AI Concierge</p>
+          <h2>Get a table-ready menu recommendation in seconds.</h2>
+        </div>
+        <div class="ai-layout">
+          <form class="ai-form" id="ai-form">
+            <label>
+              Mood
+              <select name="mood">
+                <option value="classic">Classic Moroccan</option>
+                <option value="cozy">Cozy and warm</option>
+                <option value="light">Light and fresh</option>
+                <option value="bold">Bold flavors</option>
+                <option value="coastal">Coastal seafood</option>
+              </select>
+            </label>
+            <label>
+              Diet
+              <select name="diet">
+                <option value="any">Anything</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="seafood">Seafood</option>
+                <option value="meat">Meat</option>
+              </select>
+            </label>
+            <label>
+              Spice
+              <select name="spice">
+                <option value="medium">Balanced</option>
+                <option value="mild">Mild</option>
+                <option value="bold">Bold</option>
+              </select>
+            </label>
+            <label>
+              Budget
+              <select name="budget">
+                <option value="balanced">Balanced</option>
+                <option value="value">Value picks</option>
+                <option value="premium">Premium picks</option>
+              </select>
+            </label>
+            <label class="full">
+              Occasion
+              <select name="occasion">
+                <option value="classic">Casual meal</option>
+                <option value="date night">Date night</option>
+                <option value="sharing">Sharing plates</option>
+                <option value="healthy">Healthy dinner</option>
+              </select>
+            </label>
+            <button class="button primary full" type="submit">Generate Recommendations</button>
+          </form>
+          <div class="ai-results" id="ai-results" aria-live="polite">
+            <div class="ai-empty">
+              <strong>Your recommendations will appear here.</strong>
+              <span>Choose your preferences and let the concierge build a short list.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="menu">
+        <div class="section-heading">
+          <p class="eyebrow">Menu</p>
+          <h2>Fresh Moroccan plates with a modern finish.</h2>
+        </div>
+        <div class="menu-grid">
+          {% for group in menu %}
+          <article class="menu-column">
+            <h3>{{ group["category"] }}</h3>
+            {% for item in group["items"] %}
+            <div class="menu-item">
+              <img class="menu-photo" src="{{ item["image"] }}" alt="{{ item["image_alt"] }}" loading="lazy">
+              <div class="menu-item-top">
+                <h4>{{ item["name"] }}</h4>
+                <span>{{ item["price"] }}</span>
+              </div>
+              <p>{{ item["description"] }}</p>
+              <div class="tag-row">
+                {% for tag in item["tags"] %}
+                <span>{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="reservation-section" id="reserve">
+        <div class="reservation-copy">
+          <p class="eyebrow">Reservations</p>
+          <h2>Save a table for lunch, dinner, or a long weekend feast.</h2>
+          <p>Online requests are confirmed instantly on the page. For private events or larger groups, call the restaurant team.</p>
+        </div>
+        <form class="reservation-form" id="reservation-form">
+          <label>
+            Name
+            <input name="name" autocomplete="name" required>
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+          <label>
+            Date
+            <input name="date" type="date" required>
+          </label>
+          <label>
+            Time
+            <input name="time" type="time" required>
+          </label>
+          <label>
+            Guests
+            <input name="guests" type="number" min="1" max="12" value="2" required>
+          </label>
+          <label class="full">
+            Notes
+            <textarea name="notes" rows="3" placeholder="Allergies, celebration, preferred seating"></textarea>
+          </label>
+          <button class="button primary full" type="submit">Request Reservation</button>
+          <p class="form-status" id="reservation-status" role="status"></p>
+        </form>
+      </section>
+
+      <section class="visit-band" id="visit">
+        <div>
+          <p class="eyebrow">Visit</p>
+          <h2>{{ restaurant.address }}</h2>
+          <p>{{ restaurant.phone }}</p>
+        </div>
+        <div class="hours-list">
+          {% for day, time in restaurant.hours.items() %}
+          <div>
+            <span>{{ day }}</span>
+            <strong>{{ time }}</strong>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+
+    <aside class="chatbot" aria-label="Restaurant assistant">
+      <button class="chat-toggle" id="chat-toggle" aria-expanded="false" aria-controls="chat-window">
+        <span>Assistant</span>
+      </button>
+      <section class="chat-window" id="chat-window" hidden>
+        <div class="chat-header">
+          <strong>Atlas Assistant</strong>
+          <span>Ask about menu, hours, or booking</span>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="message bot">Hi, I can help you pick a dish or plan a visit.</div>
+        </div>
+        <form class="chat-form" id="chat-form">
+          <input id="chat-input" name="message" placeholder="Ask a question" autocomplete="off">
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </aside>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
