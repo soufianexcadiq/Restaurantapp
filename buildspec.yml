@@ -31,7 +31,7 @@ phases:
       - docker push "$IMAGE_URI"
       - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest"
       - echo Writing image definitions file
-      - printf '[{"name":"restaurant-app","imageUri":"%s"}]' "$IMAGE_URI" > imagedefinitions.json
+      - printf '[{"name":"Main","imageUri":"%s"}]' "$IMAGE_URI" > imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
